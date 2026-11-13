@@ -1,11 +1,18 @@
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
-const dbPath = path.join(__dirname, "..", "data", "tereverde.db");
+const fs = require("fs");
+const dataDirectory = path.join(__dirname, "..", "data");
+
+// SQLite creates the database file, but it does not create its parent folder.
+// Ensure the folder exists so a fresh checkout can start without manual setup.
+fs.mkdirSync(dataDirectory, { recursive: true });
+
+const dbPath = path.join(dataDirectory, "tereverde.db");
 const db = new sqlite3.Database(dbPath, (erro) => {
 
     if (erro) {
 
-        console.log("Erro ao conectar ao banco.");
+        console.error("Erro ao conectar ao banco:", erro.message);
 
     } else {
 
